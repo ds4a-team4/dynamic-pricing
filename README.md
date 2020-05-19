@@ -9,19 +9,19 @@ We started by performing EDAs on different datasets, gathering information about
 See below an index for our file structure:
 
 ## File Structure
-### DASH
+## DASH
 In the DASH folder we host the front-end to our web application code.
 
-### EDA
+## EDA
 Folder that contains our Exploratory Data Analysis process.
 
-### ETL
+## ETL
 Contains the routines to Extract, Transform and Load our data into more aggregated levels.
 
-### data
+## data
 Collection of datasets.
 
-### models
+## models
 Folder that hosts both the simulator's code to forecast orders levels and the Reinforcement Learning algorithms that were used.
 
 ## File Structure
