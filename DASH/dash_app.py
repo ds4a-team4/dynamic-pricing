@@ -9,7 +9,7 @@ import pandas as pd
 df = pd.read_csv('../models/cellphones/cellphones_final_results.csv')
 
 # app = dash.Dash()
-app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY])
+app = dash.Dash(external_stylesheets=[dbc.themes.YETI])
 app.title = 'DS4A'
 
 # Boostrap CSS.
@@ -159,14 +159,14 @@ def update_graph(selector):
         'layout': {
             'title': 'Baseline x Reinforcement Learning',
             'xaxis' : dict(
-                title='Prices',
+                title='TIME',
                 titlefont=dict(
-                family='Courier New, monospace',
+                family='Helvetica, monospace',
                 size=20,
                 color='#7f7f7f'
             )),
             'yaxis' : dict(
-                title='Time',
+                title='ORDERS',
                 titlefont=dict(
                 family='Helvetica, monospace',
                 size=20,
