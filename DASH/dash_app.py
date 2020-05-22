@@ -142,21 +142,31 @@ with open('./lr_cellphone_C.pkl', 'rb') as f:
 
 df = pd.read_csv('./cellphones_final_results.csv')
 
-# app = dash.Dash()
+############ DASH APP ##############
+
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SPACELAB])
 server = app.server
 app.title = 'DS4A'
 
-# Boostrap CSS.
-# app.css.append_css({'external_url': 'https://codepen.io/amyoshino/pen/jzXypZ.css'})
-
-# Materialize CSS
-# external_css = ["https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"]
-# for css in external_css:
-#     app.css.append_css({"external_url": css})
-
-# image1 = 'assets/cloud2.jpeg' # replace with your own image
-# encoded_image = base64.b64encode(open(image_filename, 'rb').read())
+navbar = dbc.NavbarSimple(
+    children=[
+        dbc.NavItem(dbc.NavLink("Page 1", href="#")),
+        dbc.DropdownMenu(
+            children=[
+                dbc.DropdownMenuItem("More pages", header=True),
+                dbc.DropdownMenuItem("Page 2", href="#"),
+                dbc.DropdownMenuItem("Page 3", href="#"),
+            ],
+            nav=True,
+            in_navbar=True,
+            label="More",
+        ),
+    ],
+    brand="NavbarSimple",
+    brand_href="#",
+    color="primary",
+    dark=True,
+)
 
 app.layout = dbc.Container(
     html.Div(
@@ -221,19 +231,6 @@ app.layout = dbc.Container(
                         ],
                         className='col s4 m4 l4'
                     )
-                    #                     html.Div(
-                    #                         [   html.H5('Date Range'),
-                    #                             dcc.DatePickerRange(
-                    #                                 id='my-date-picker-range',
-                    #                                 min_date_allowed=dt(df.year.min(), 8, 5),
-                    #                                 max_date_allowed=dt(2017, 9, 19),
-                    #                                 initial_visible_month=dt(2017, 8, 5),
-                    #                                 end_date=dt(2017, 8, 25).date()
-                    #                             ),
-                    #                             html.Div(id='output-container-date-picker-range')
-                    #                         ],
-                    #                         className='col s6 m6 l6'
-                    #                     )
 
                 ], className="row",
                 style={
@@ -260,7 +257,7 @@ app.layout = dbc.Container(
                     ),
                     html.Div(
                         [
-                            html.H5('RL'),
+                            html.H5('Dynamic Pricing'),
                             html.Div([
                                 html.P(f'R$ {round(df.rl_rewards.sum(),2)}')
                             ],
@@ -272,7 +269,7 @@ app.layout = dbc.Container(
                     ),
                     html.Div(
                         [
-                            html.H5('DELTA'),
+                            html.H5('Improvement'),
                             html.Div([
                                 html.P(
                                     f'{round((df.rl_rewards.sum() / df.baseline_rewards.sum() - 1) * 100, 2)} %'
@@ -353,20 +350,6 @@ app.layout = dbc.Container(
                         ],
                         className='col s4 m4 l4'
                     )
-                    #                     html.Div(
-                    #                         [   html.H5('Date Range'),
-                    #                             dcc.DatePickerRange(
-                    #                                 id='my-date-picker-range',
-                    #                                 min_date_allowed=dt(df.year.min(), 8, 5),
-                    #                                 max_date_allowed=dt(2017, 9, 19),
-                    #                                 initial_visible_month=dt(2017, 8, 5),
-                    #                                 end_date=dt(2017, 8, 25).date()
-                    #                             ),
-                    #                             html.Div(id='output-container-date-picker-range')
-                    #                         ],
-                    #                         className='col s6 m6 l6'
-                    #                     )
-
                 ], className="row",
                 style={
                     'margin-top': '15px',
@@ -418,20 +401,6 @@ app.layout = dbc.Container(
                         ],
                         className='col s4 m4 l4'
                     )
-                    #                     html.Div(
-                    #                         [   html.H5('Date Range'),
-                    #                             dcc.DatePickerRange(
-                    #                                 id='my-date-picker-range',
-                    #                                 min_date_allowed=dt(df.year.min(), 8, 5),
-                    #                                 max_date_allowed=dt(2017, 9, 19),
-                    #                                 initial_visible_month=dt(2017, 8, 5),
-                    #                                 end_date=dt(2017, 8, 25).date()
-                    #                             ),
-                    #                             html.Div(id='output-container-date-picker-range')
-                    #                         ],
-                    #                         className='col s6 m6 l6'
-                    #                     )
-
                 ], className="row",
                 style={
                     'margin-top': '15px',
@@ -483,7 +452,6 @@ app.layout = dbc.Container(
                 ], className="row",
                 style={
                     'margin-top': '15px',
-                    #                                 'margin-bottom': '15px'
                 }
             ),
 
@@ -499,7 +467,7 @@ def update_graph(selector):
     data = []
     if 'electronics' in selector:
         data.append({'x': df.index, 'y': df.rl_rewards, 'type': 'line',
-                     'name': 'RL Profits', 'line': dict(color='#EDAD00')})
+                     'name': 'Dynamic Pricing Profits', 'line': dict(color='#EDAD00')})
         data.append({'x': df.index, 'y': df.baseline_rewards, 'type': 'line',
                      'name': 'Baseline Profits', 'line': dict(color='#6A00A3')})
     figure = {
