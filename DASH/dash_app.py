@@ -5,11 +5,12 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import pandas as pd
+from datetime import datetime as dt
 
 df = pd.read_csv('../models/cellphones/cellphones_final_results.csv')
 
 # app = dash.Dash()
-app = dash.Dash(external_stylesheets=[dbc.themes.YETI])
+app = dash.Dash(external_stylesheets=[dbc.themes.SPACELAB])
 app.title = 'DS4A'
 
 # Boostrap CSS.
@@ -34,9 +35,10 @@ app.layout = dbc.Container(
                             style={
                                 'text-align': 'center',
                                 'margin-top': '15px',
-                                'margin-bottom': '25px'
+                                'margin-bottom': '45px'
                             }
                         )
+                        
                     ) 
                 ]
             ),
@@ -44,7 +46,7 @@ app.layout = dbc.Container(
             html.Div(
                 [
                     html.Div(
-                        [   html.P('Product Group'),
+                        [   html.H5('Product Group'),
                             dcc.Dropdown(
                                 id='selector_group',
                                 options= [{'label': str(item),
@@ -57,7 +59,7 @@ app.layout = dbc.Container(
                         className='col s4 m4 l4'
                     ),
                     html.Div(
-                        [   html.P('Product Type'),
+                        [   html.H5('Product Type'),
                             dcc.Dropdown(
                                 id='selector_type',
                                 options= [{'label': str(item),
@@ -70,7 +72,7 @@ app.layout = dbc.Container(
                         className='col s4 m4 l4'
                     ),
                     html.Div(
-                        [   html.P('Price Range'),
+                        [   html.H5('Product Price Category'),
                             dcc.Dropdown(
                                 id='selector_price_range',
                                 options= [{'label': str(item),
@@ -81,7 +83,20 @@ app.layout = dbc.Container(
                             )
                         ],
                         className='col s4 m4 l4'
-                    )                      
+                    )
+#                     html.Div(
+#                         [   html.H5('Date Range'),
+#                             dcc.DatePickerRange(
+#                                 id='my-date-picker-range',
+#                                 min_date_allowed=dt(df.year.min(), 8, 5),
+#                                 max_date_allowed=dt(2017, 9, 19),
+#                                 initial_visible_month=dt(2017, 8, 5),
+#                                 end_date=dt(2017, 8, 25).date()
+#                             ),
+#                             html.Div(id='output-container-date-picker-range')
+#                         ],
+#                         className='col s6 m6 l6'
+#                     )        
 
                 ], className="row",
                         style={
@@ -90,46 +105,49 @@ app.layout = dbc.Container(
                             }
             ),
 
-#             html.Div(
-#                 [
+            html.Div(
+                [
 
-#                     html.Div(
-#                         [   html.P('Baseline'),
-#                             dcc.Input(
-#                                 placeholder='Baseline',
-#                                 type='text',
-#                                 value=''
-#                             ) 
-#                         ],
-#                         className='col s4 m4 l4'
-#                     ),
-#                     html.Div(
-#                         [   html.P('RL Model'),
-#                             dcc.Input(
-#                                 placeholder='RL Model',
-#                                 type='text',
-#                                 value=''
-#                             ) 
-#                         ],
-#                         className='col s4 m4 l4'
-#                     ),
-#                     html.Div(
-#                         [   html.P('Delta'),
-#                             dcc.Input(
-#                                 placeholder='Delta',
-#                                 type='text',
-#                                 value=''
-#                             ) 
-#                         ],
-#                         className='col s4 m4 l4'
-#                     )                        
+                    html.Div(
+                        [   html.H5('Baseline'),
+                            html.Div([
+                                html.P(f'R$ {round(df.baseline_prices.sum(),2)}')
+                            ],
+                            style={
+                                    'color':'green'
+                                })
+                        ],
+                        className='col s4 m4 l4'
+                    ),
+                    html.Div(
+                        [   html.H5('RL'),
+                            html.Div([
+                                html.P(f'R$ {round(df.rl_prices.sum(),2)}')
+                            ],
+                            style={
+                                    'color':'green'
+                                })
+                        ],
+                        className='col s4 m4 l4'
+                    ),
+                    html.Div(
+                        [   html.H5('DELTA'),
+                            html.Div([
+                                html.P(f'{round(df.rl_prices.sum() / df.baseline_prices.sum() * 100,2)} %')
+                            ],
+                            style={
+                                    'color':'green'
+                                })
+                        ],
+                        className='col s4 m4 l4'
+                    )                        
 
-#                 ], className="row",
-#                         style={
-#                                 'margin-top': '15px',
+                ], className="row",
+                        style={
+                                'margin-top': '15px',
 #                                 'margin-bottom': '15px'
-#                             }
-#             ),
+                            }
+            ),
 
 
             html.Div(
