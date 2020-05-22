@@ -21,32 +21,33 @@ app.title = 'DS4A'
 # for css in external_css:
 #     app.css.append_css({"external_url": css})
 
-
+# image1 = 'assets/cloud2.jpeg' # replace with your own image
+# encoded_image = base64.b64encode(open(image_filename, 'rb').read())
 
 app.layout = dbc.Container(
     html.Div(
         [
             html.Div(
                 [
-                    html.Div(
-                        html.H1
-                        (
-                            children='Olist Dynamic Pricing',
-                            style={
-                                'text-align': 'center',
-                                'margin-top': '15px',
-                                'margin-bottom': '45px'
-                            }
-                        )
-                        
-                    ) 
+                    html.H1
+                    (
+                        children='Olist Dynamic Pricing',
+                        style={
+                            'text-align': 'center',
+                            'margin-top': '15px',
+                            'margin-bottom': '45px',
+                            'color':'#0C29D0',
+                            'background-image': 'url("/assets/background-cloud.jpg")'
+                        }
+                    )                            
                 ]
             ),
 
             html.Div(
                 [
                     html.Div(
-                        [   html.H5('Product Group'),
+                        [   
+                            html.H5('Product Group'),
                             dcc.Dropdown(
                                 id='selector_group',
                                 options= [{'label': str(item),
@@ -59,7 +60,8 @@ app.layout = dbc.Container(
                         className='col s4 m4 l4'
                     ),
                     html.Div(
-                        [   html.H5('Product Type'),
+                        [   
+                            html.H5('Product Type'),
                             dcc.Dropdown(
                                 id='selector_type',
                                 options= [{'label': str(item),
@@ -72,7 +74,8 @@ app.layout = dbc.Container(
                         className='col s4 m4 l4'
                     ),
                     html.Div(
-                        [   html.H5('Product Price Category'),
+                        [   
+                            html.H5('Product Price Category'),
                             dcc.Dropdown(
                                 id='selector_price_range',
                                 options= [{'label': str(item),
@@ -109,34 +112,37 @@ app.layout = dbc.Container(
                 [
 
                     html.Div(
-                        [   html.H5('Baseline'),
+                        [   
+                            html.H5('Baseline'),
                             html.Div([
                                 html.P(f'R$ {round(df.baseline_prices.sum(),2)}')
                             ],
                             style={
-                                    'color':'green'
+                                    'color':'#0DC78B'
                                 })
                         ],
                         className='col s4 m4 l4'
                     ),
                     html.Div(
-                        [   html.H5('RL'),
+                        [   
+                            html.H5('RL'),
                             html.Div([
                                 html.P(f'R$ {round(df.rl_prices.sum(),2)}')
                             ],
                             style={
-                                    'color':'green'
+                                    'color':'#0DC78B'
                                 })
                         ],
                         className='col s4 m4 l4'
                     ),
                     html.Div(
-                        [   html.H5('DELTA'),
+                        [   
+                            html.H5('DELTA'),
                             html.Div([
                                 html.P(f'{round(df.rl_prices.sum() / df.baseline_prices.sum() * 100,2)} %')
                             ],
                             style={
-                                    'color':'green'
+                                    'color':'#0DC78B'
                                 })
                         ],
                         className='col s4 m4 l4'
@@ -170,8 +176,8 @@ app.layout = dbc.Container(
 def update_graph(selector):
     data = []
     if 'electronics' in selector:
-        data.append({'x': df.index, 'y': df.baseline_orders, 'type': 'line', 'name': 'Baseline Orders'})
-        data.append({'x': df.index, 'y': df.rl_orders, 'type': 'line', 'name': 'RL Orders'})
+        data.append({'x': df.index, 'y': df.baseline_orders, 'type': 'line', 'name': 'Baseline Orders', 'line': dict(color='#6A00A3')})
+        data.append({'x': df.index, 'y': df.rl_orders, 'type': 'line', 'name': 'RL Orders', 'line': dict(color='#EDAD00')})
     figure = {
         'data': data,
         'layout': {
@@ -181,14 +187,14 @@ def update_graph(selector):
                 titlefont=dict(
                 family='Helvetica, monospace',
                 size=20,
-                color='#7f7f7f'
+                color='#312F4F'
             )),
             'yaxis' : dict(
                 title='ORDERS',
                 titlefont=dict(
                 family='Helvetica, monospace',
                 size=20,
-                color='#7f7f7f'
+                color='#312F4F'
             ))
         }
     }
