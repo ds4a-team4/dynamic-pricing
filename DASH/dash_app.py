@@ -144,7 +144,15 @@ df = pd.read_csv('./cellphones_final_results.csv')
 
 ############ DASH APP ##############
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SPACELAB])
+app = dash.Dash(
+    __name__, 
+    external_stylesheets=[dbc.themes.SPACELAB],
+    meta_tags=[
+        {"name": "viewport", "content": "width=device-width, initial-scale=1"}
+    ]
+)
+
+
 server = app.server
 app.title = 'DS4A'
 
