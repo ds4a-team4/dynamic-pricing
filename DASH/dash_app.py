@@ -320,8 +320,16 @@ app.layout = dbc.Container(
                         style={
                             'text-align': 'center',
                             'margin-top': '55px',
-                            'margin-bottom': '45px',
-                            'color': '#0C29D0',
+                            'margin-bottom': '15px',
+                            'color': '#0C29D0'
+                        }
+                    ),
+                    html.P
+                    (
+                        children='change the parameters and see the price suggestion in real time',
+                        style={
+                            'text-align': 'center',
+                            'margin-bottom': '45px'
                         }
                     )
                 ]
