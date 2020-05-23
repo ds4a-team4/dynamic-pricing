@@ -11,6 +11,9 @@ import torch.nn as nn
 import pickle
 import numpy as np
 import datetime
+import configparser
+
+from sqlalchemy import create_engine
 
 
 class Environment:
@@ -142,10 +145,16 @@ with open('./lr_cellphone_C.pkl', 'rb') as f:
 
 df = pd.read_csv('./cellphones_final_results.csv')
 
+# config = configparser.ConfigParser()
+# config.read('rds.conf')
+# uri = config.get('rds', 'uri')
+# engine = create_engine(uri)
+# df = pd.read_sql_table("rl_results", con=engine)
+
 ############ DASH APP ##############
 
 app = dash.Dash(
-    __name__, 
+    __name__,
     external_stylesheets=[dbc.themes.SPACELAB],
     meta_tags=[
         {"name": "viewport", "content": "width=device-width, initial-scale=1"}
@@ -300,8 +309,8 @@ app.layout = dbc.Container(
                     'margin-bottom': '55px'                    
                 }
             ),
-            
-            html.Hr(), #horizontal line
+
+            html.Hr(),  # horizontal line
 
             html.Div(
                 [
@@ -317,7 +326,7 @@ app.layout = dbc.Container(
                     )
                 ]
             ),
-            
+
             html.Div(
                 [
                     html.Div(
@@ -325,7 +334,7 @@ app.layout = dbc.Container(
                             html.H5('Date'),
                             dcc.Input(
                                 id='date_input',
-                                value=datetime.date.today().strftime('%m/%d/%Y'), 
+                                value=datetime.date.today().strftime('%m/%d/%Y'),
                                 style={
                                     'color': '#0C29D0'
                                 }
@@ -343,7 +352,7 @@ app.layout = dbc.Container(
                             html.H5('Stock Quantity'),
                             dcc.Input(
                                 id='stock_input',
-                                value='1', 
+                                value='1',
                                 style={
                                     'color': '#0C29D0'
                                 }
@@ -361,7 +370,7 @@ app.layout = dbc.Container(
                             html.H5('Cost'),
                             dcc.Input(
                                 id='base_cost_input',
-                                value='718', 
+                                value='718',
                                 style={
                                     'color': '#0C29D0'
                                 }
@@ -374,7 +383,7 @@ app.layout = dbc.Container(
                         ],
                         className='col s4 m4 l4'
                     )
-                    
+
                 ], className="row",
                 style={
                     'margin-top': '15px',
@@ -389,7 +398,7 @@ app.layout = dbc.Container(
                             html.H5('Freight Value'),
                             dcc.Input(
                                 id='freight_value_input',
-                                value='25', 
+                                value='25',
                                 style={
                                     'color': '#0C29D0'
                                 }
@@ -402,13 +411,13 @@ app.layout = dbc.Container(
 
                         ],
                         className='col s4 m4 l4'
-                    ), 
+                    ),
                     html.Div(
                         [
                             html.H5('Competitor\'s Price'),
                             dcc.Input(
                                 id='competition_price_input',
-                                value='898', 
+                                value='898',
                                 style={
                                     'color': '#0C29D0'
                                 }
@@ -420,7 +429,7 @@ app.layout = dbc.Container(
                             )
                         ],
                         className='col s4 m4 l4'
-                    ),                    
+                    ),
                     html.Div(
                         [
                             html.Div([
@@ -486,7 +495,7 @@ app.layout = dbc.Container(
                     'margin-top': '15px',
                 }
             ),
-            
+
             html.Div(
                 [
                     html.P
@@ -517,13 +526,13 @@ app.layout = dbc.Container(
 )
 def update_graph(selector_group, selector_type, selector_price_range):
     data = []
-    if 'electronics' in selector_group and'cellphones' in selector_type and 'C' in selector_price_range :
+    if 'electronics' in selector_group and'cellphones' in selector_type and 'C' in selector_price_range:
         data.append({'x': df.index, 'y': df.rl_rewards, 'type': 'line',
                      'name': 'Dynamic Pricing Profits', 'line': dict(color='#EDAD00')})
         data.append({'x': df.index, 'y': df.baseline_rewards, 'type': 'line',
                      'name': 'Baseline Profits', 'line': dict(color='#6A00A3')})
     figure = {
-        'data': data,        
+        'data': data,
         'layout': {
             'title': 'Baseline x Reinforcement Learning',
             'xaxis': dict(
@@ -611,11 +620,12 @@ def update_output(date_input, freight_value_input, competition_price_input,
         friday = 1 if dayofweek == 4 else 0
         black_friday = 0
         carnival = 0
-        christmas = 0
-        mothers_day = 0
-        new_year = 0
+        christmas = 1 if (day == 25 and month == 12) else 0
+        mothers_day = 1 if ((8 <= day <= 14) and (
+            month == 5) and (dayofweek == 6)) else 0
+        new_year = 1 if (day == 1 and month == 1) else 0
         others = 0
-        valentines = 0
+        valentines = 1 if (day == 12 and month == 6) else 0
 
         date_next = date + datetime.timedelta(days=1)
         year_next = date_next.year
@@ -672,14 +682,9 @@ def update_output(date_input, freight_value_input, competition_price_input,
         profit = 0
         message_output = ''
 
-    orders_output = str(round(orders,0))
-    o_price_output = 'R$ '+str(round(o_price,2))
-    profit_output = 'R$ '+str(round(profit,2))
-
-    # orders_output = ''
-    # o_price_output = ''
-    # profit_output = ''
-    # message_output = ''
+    orders_output = str(round(orders, 0))
+    o_price_output = 'R$ '+str(round(o_price, 2))
+    profit_output = 'R$ '+str(round(profit, 2))
 
     output = (
         orders_output,
