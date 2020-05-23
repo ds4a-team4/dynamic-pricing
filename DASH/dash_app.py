@@ -148,26 +148,6 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SPACELAB])
 server = app.server
 app.title = 'DS4A'
 
-navbar = dbc.NavbarSimple(
-    children=[
-        dbc.NavItem(dbc.NavLink("Page 1", href="#")),
-        dbc.DropdownMenu(
-            children=[
-                dbc.DropdownMenuItem("More pages", header=True),
-                dbc.DropdownMenuItem("Page 2", href="#"),
-                dbc.DropdownMenuItem("Page 3", href="#"),
-            ],
-            nav=True,
-            in_navbar=True,
-            label="More",
-        ),
-    ],
-    brand="NavbarSimple",
-    brand_href="#",
-    color="primary",
-    dark=True,
-)
-
 app.layout = dbc.Container(
     html.Div(
         [
@@ -178,7 +158,7 @@ app.layout = dbc.Container(
                         children='Olist Dynamic Pricing',
                         style={
                             'text-align': 'center',
-                            'margin-top': '15px',
+                            'margin-top': '20px',
                             'margin-bottom': '45px',
                             'color': '#0C29D0',
                             'background-image': 'url("/assets/background-cloud.jpg")'
@@ -235,7 +215,7 @@ app.layout = dbc.Container(
                 ], className="row",
                 style={
                     'margin-top': '15px',
-                    'margin-bottom': '15px'
+                    'margin-bottom': '20px'
                 }
             ),
 
@@ -284,8 +264,7 @@ app.layout = dbc.Container(
 
                 ], className="row",
                 style={
-                    'margin-top': '15px',
-                    #                                 'margin-bottom': '15px'
+                    'margin-top': '10px',
                 }
             ),
 
@@ -298,10 +277,29 @@ app.layout = dbc.Container(
                     ], className='col s12 m12 l12'
                     )
 
-                ], className="row"
+                ], className="row",
+                style={
+                    'margin-bottom': '55px',
+                }
             ),
+            
+            html.Hr(), #horizontal line
 
-
+            html.Div(
+                [
+                    html.H3
+                    (
+                        children='Dynamic Pricing Prediction',
+                        style={
+                            'text-align': 'center',
+                            'margin-top': '55px',
+                            'margin-bottom': '45px',
+                            'color': '#0C29D0',
+                        }
+                    )
+                ]
+            ),
+            
             html.Div(
                 [
                     html.Div(
@@ -309,7 +307,10 @@ app.layout = dbc.Container(
                             html.H5('Date'),
                             dcc.Input(
                                 id='date_input',
-                                value=datetime.date.today().strftime('%m/%d/%Y')
+                                value=datetime.date.today().strftime('%m/%d/%Y'), 
+                                style={
+                                    'color': '#0C29D0'
+                                }
                             ),
                             html.Div(
                                 [html.P('Invalid value')],
@@ -321,50 +322,13 @@ app.layout = dbc.Container(
                     ),
                     html.Div(
                         [
-                            html.H5('Freight Value'),
-                            dcc.Input(
-                                id='freight_value_input',
-                                value='25'
-                            ),
-                            html.Div(
-                                [html.P('Invalid value')],
-                                style={'display': 'none'},
-                                id="freight_value_invalid"
-                            )
-
-                        ],
-                        className='col s4 m4 l4'
-                    ),
-                    html.Div(
-                        [
-                            html.H5('Competitor\'s Price'),
-                            dcc.Input(
-                                id='competition_price_input',
-                                value='898'
-                            ),
-                            html.Div(
-                                [html.P('Invalid value')],
-                                style={'display': 'none'},
-                                id="competition_price_invalid"
-                            )
-                        ],
-                        className='col s4 m4 l4'
-                    )
-                ], className="row",
-                style={
-                    'margin-top': '15px',
-                    'margin-bottom': '15px'
-                }
-            ),
-
-            html.Div(
-                [
-                    html.Div(
-                        [
                             html.H5('Stock Quantity'),
                             dcc.Input(
                                 id='stock_input',
-                                value='1'
+                                value='1', 
+                                style={
+                                    'color': '#0C29D0'
+                                }
                             ),
                             html.Div(
                                 [html.P('Invalid value')],
@@ -379,7 +343,10 @@ app.layout = dbc.Container(
                             html.H5('Cost'),
                             dcc.Input(
                                 id='base_cost_input',
-                                value='718'
+                                value='718', 
+                                style={
+                                    'color': '#0C29D0'
+                                }
                             ),
                             html.Div(
                                 [html.P('Invalid value')],
@@ -388,7 +355,54 @@ app.layout = dbc.Container(
                             )
                         ],
                         className='col s4 m4 l4'
-                    ),
+                    )
+                    
+                ], className="row",
+                style={
+                    'margin-top': '15px',
+                    'margin-bottom': '20px'
+                }
+            ),
+
+            html.Div(
+                [
+                    html.Div(
+                        [
+                            html.H5('Freight Value'),
+                            dcc.Input(
+                                id='freight_value_input',
+                                value='25', 
+                                style={
+                                    'color': '#0C29D0'
+                                }
+                            ),
+                            html.Div(
+                                [html.P('Invalid value')],
+                                style={'display': 'none'},
+                                id="freight_value_invalid"
+                            )
+
+                        ],
+                        className='col s4 m4 l4'
+                    ), 
+                    html.Div(
+                        [
+                            html.H5('Competitor\'s Price'),
+                            dcc.Input(
+                                id='competition_price_input',
+                                value='898', 
+                                style={
+                                    'color': '#0C29D0'
+                                }
+                            ),
+                            html.Div(
+                                [html.P('Invalid value')],
+                                style={'display': 'none'},
+                                id="competition_price_invalid"
+                            )
+                        ],
+                        className='col s4 m4 l4'
+                    ),                    
                     html.Div(
                         [
                             html.Div([
@@ -404,7 +418,7 @@ app.layout = dbc.Container(
                 ], className="row",
                 style={
                     'margin-top': '15px',
-                    'margin-bottom': '15px'
+                    'margin-bottom': '20px'
                 }
             ),
 
@@ -454,38 +468,58 @@ app.layout = dbc.Container(
                     'margin-top': '15px',
                 }
             ),
-
-        ]
+            
+            html.Div(
+                [
+                    html.P
+                    (
+                        children='Powered by Team4 - Brazil - DS4A',
+                        style={
+                            'text-align': 'center',
+                            'padding-top': '150px'
+                        }
+                    )
+                ]
+            )
+        ],
+        style={
+            'margin-bottom': '55px',
+        }
     )
 )
 
 
 @app.callback(
     Output(component_id='graph1', component_property='figure'),
-    [Input(component_id='selector_group', component_property='value')])
-def update_graph(selector):
+    [
+        Input(component_id='selector_group', component_property='value'),
+        Input(component_id='selector_type', component_property='value'),
+        Input(component_id='selector_price_range', component_property='value')
+    ]
+)
+def update_graph(selector_group, selector_type, selector_price_range):
     data = []
-    if 'electronics' in selector:
+    if 'electronics' in selector_group and'cellphones' in selector_type and 'C' in selector_price_range :
         data.append({'x': df.index, 'y': df.rl_rewards, 'type': 'line',
                      'name': 'Dynamic Pricing Profits', 'line': dict(color='#EDAD00')})
         data.append({'x': df.index, 'y': df.baseline_rewards, 'type': 'line',
                      'name': 'Baseline Profits', 'line': dict(color='#6A00A3')})
     figure = {
-        'data': data,
+        'data': data,        
         'layout': {
             'title': 'Baseline x Reinforcement Learning',
             'xaxis': dict(
                 title='TIME',
                 titlefont=dict(
                     family='Helvetica, monospace',
-                    size=20,
+                    size=14,
                     color='#312F4F'
                 )),
             'yaxis': dict(
                 title='PROFITS',
                 titlefont=dict(
                     family='Helvetica, monospace',
-                    size=20,
+                    size=14,
                     color='#312F4F'
                 ))
         }
@@ -620,9 +654,9 @@ def update_output(date_input, freight_value_input, competition_price_input,
         profit = 0
         message_output = ''
 
-    orders_output = str(orders)
-    o_price_output = str(o_price)
-    profit_output = str(profit)
+    orders_output = str(round(orders,0))
+    o_price_output = 'R$ '+str(round(o_price,2))
+    profit_output = 'R$ '+str(round(profit,2))
 
     # orders_output = ''
     # o_price_output = ''
