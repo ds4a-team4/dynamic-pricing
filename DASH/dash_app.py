@@ -154,26 +154,36 @@ app = dash.Dash(
 
 
 server = app.server
-app.title = 'DS4A'
+app.title = 'Dynamic Pricing'
 
 app.layout = dbc.Container(
     html.Div(
         [
+#             html.Div(
+#                 [
+#                     html.H1
+#                     (
+#                         children='Olist Dynamic Pricing',
+#                         style={
+#                             'text-align': 'center',
+#                             'margin-top': '20px',
+#                             'margin-bottom': '45px',
+#                             'color': '#0C29D0',
+#                             'background-image': 'url("/assets/background-cloud.jpg")'
+#                         }
+#                     )
+#                 ]
+#             ),
             html.Div(
-                [
-                    html.H1
-                    (
-                        children='Olist Dynamic Pricing',
-                        style={
-                            'text-align': 'center',
-                            'margin-top': '20px',
-                            'margin-bottom': '45px',
-                            'color': '#0C29D0',
-                            'background-image': 'url("/assets/background-cloud.jpg")'
-                        }
-                    )
-                ]
-            ),
+                    [
+                        html.Img(src=app.get_asset_url('logo.png'), style={'height':'15%', 'width':'20%'})
+                    ],
+                    style={
+                        'display': 'inline-block',
+                        'text-align': 'center'
+                    }
+            ),        
+            
 
             html.Div(
                 [
@@ -279,15 +289,15 @@ app.layout = dbc.Container(
 
             html.Div(
                 [
-                    html.Div([
-                        dcc.Graph(id='graph1'
-                                  )
-                    ], className='col s12 m12 l12'
+                    html.Div(
+                        [
+                            dcc.Graph(id='graph1'
+                                      )
+                        ], className='col s12 m12 l12'
                     )
-
                 ], className="row",
                 style={
-                    'margin-bottom': '55px',
+                    'margin-bottom': '55px'                    
                 }
             ),
             
