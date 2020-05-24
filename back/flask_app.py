@@ -1,12 +1,10 @@
 import flask
-import jsonify
 from RL import create_results
 import pandas as pd
 from sqlalchemy import create_engine
 import secrets
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
 
 def get_result_df():
     uri = secrets.URI

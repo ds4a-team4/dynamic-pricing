@@ -3,7 +3,6 @@ import torch.nn as nn
 import pickle
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
 from Q_Network import Q_Network
 from Environment import Environment
 from sqlalchemy import create_engine
@@ -78,6 +77,3 @@ def create_results():
     results['group'] = 'electronics'
     results['type'] = 'cellphones'
     results['price_range'] = 'C'
-
-    #save results
-    results.to_sql("rl_results",engine,if_exists='replace',index=False)
