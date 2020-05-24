@@ -77,3 +77,4 @@ def create_results():
     results['group'] = 'electronics'
     results['type'] = 'cellphones'
     results['price_range'] = 'C'
+    results.to_sql("rl_results",engine,if_exists='replace',index=False)

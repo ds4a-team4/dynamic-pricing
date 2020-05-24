@@ -9,6 +9,9 @@ We started by performing EDAs on different datasets, gathering information about
 See below an index for our file structure:
 
 ## File Structure
+## back
+In the back folder we host the Flask API.  
+
 ## DASH
 In the DASH folder we host the front-end to our web application code.
 
@@ -24,44 +27,18 @@ Collection of datasets.
 ## models
 Folder that hosts both the simulator's code to forecast orders levels and the Reinforcement Learning algorithms that were used.
 
+## models_dash
+Folder that contains the last version of our simulator.  
+
 ## File Structure
+├── back  -- Flask API  
+│   ├── models  
 ├── DASH -- Hosts our front end  
-│   └── dash_app.py  
-├── EDA -- Exploratory data analysis  
-│   ├── EDA_Orders.ipynb  
-│   ├── EDA_product_info.ipynb  
-│   ├── EDA_product_type.ipynb  
-│   ├── EDA_timeseries.ipynb  
-│   └── timeseries_report.html  
-├── ETL -- Preprocessing our data  
-│   ├── ETL.ipynb  
-│   ├── ETL_full.ipynb  
-│   ├── cellphone2017.ipynb  
-│   ├── cellphone_etl.ipynb  
-│   ├── electronics_etl.ipynb  
-│   └── read_athena.ipynb  
-├── README.md  
-├── data -- Our Datasets  
-│   ├── Celular_data.csv  
-│   ├── celular_over50.csv  
-│   └── timeseries644.csv  
+│   └── assets  
+├── data  -- Our Datasets 
+├── EDA  -- Exploratory data analysis  
+├── ETL  
 ├── models  -- Model collection and testing  
-│   ├── 004 Test_cellphones.ipynb  
-│   ├── 004.1_by_gtin.ipynb  
-│   ├── 004.2_by_cluster.ipynb  
-│   ├── 004.3_by_product.ipynb  
-│   ├── 005 Test_cellphones.ipynb  
-│   ├── Linear_Regression.ipynb  
-│   ├── Linear_Regression_CellPhones.ipynb  
-│   ├── Model_Selection.ipynb  
-│   ├── bottom-up.ipynb  
-│   ├── cellphone_prophet.ipynb  
-│   ├── cellphones  
-│   │   ├── CrazyRL.ipynb  
-│   │   ├── cellphone_model.ipynb  
-│   │   ├── cellphonedata.csv  
-│   │   └── holidays.csv  
-│   ├── electronics_prophet-daily.ipynb  
-│   ├── electronics_prophet-weekly.ipynb  
-│   └── hierarchy_price_electronics.ipynb  
-└── requirements.txt  
+│   └── cellphones  
+└── models_dash  -- Final Model using Reinforcement Learning    
+    └── cellphones  
