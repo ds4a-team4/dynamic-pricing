@@ -9,9 +9,23 @@ from sqlalchemy import create_engine
 import secrets
 
 def base_cost(offer):
+    """
+    Calculate the base cost, based on the olist_price.
+    THe resuting value will be the base ŕice that will receive increases in the RL model
+    """
     return 0.8 * offer
 
 def create_results():
+    """
+    Applies the reinforcement learning method to a given dataset 
+
+    Depends on:
+    lr_cellphone_C.pkl - linear regression trained model
+    Q_state.torch - reinforcement learning trained model
+    Environment - contains methods needed for the RL Agent
+    Cellphone_data RDS table - contains the dataset that will be used to generate the prediction
+    
+    """
     with open('./models/lr_cellphone_C.pkl','rb') as f:
         model = pickle.load(f)
 

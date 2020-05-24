@@ -7,6 +7,9 @@ import secrets
 app = flask.Flask(__name__)
 
 def get_result_df():
+    """
+    Returns the predicted table 
+    """
     uri = secrets.URI
     engine = create_engine(uri)
     df = pd.read_sql_table("rl_results", con=engine)

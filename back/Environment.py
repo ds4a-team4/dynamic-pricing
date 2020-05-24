@@ -6,7 +6,30 @@ import numpy as np
 import plotly.graph_objects as go
 
 class Environment:
-    
+    """
+    Simulates an environment for the RL agent
+    Init arguments:
+    model: a model to predict demand as a function of price and other
+           covariates (see the function predict_demand)
+    df: dataframe with historical data, including the competitors'
+        prices
+
+    Properties:
+    self.model: the model used to predict demand
+    self.data: the dataframe with historical data
+    self.N: max number os iterations considering the length of self.data
+    self.t: indicates the current time, starting at 0
+    self.done: indicates that the simulation is done, i.e. the simulation
+               has been run on the entire self.data dataframe
+    self.orders: the number of orders predicted for the current time instant
+    self.olist_price: the price selected due to and action
+
+    Methods:
+    reset(self): resets the simulation to the initial conditions
+    step(self, act): performs a step in the simulation considering
+                     an action ranging from 0 to 9 
+                     (choice of a price)
+    """
     def __init__(self, model, df):
         
         self.model = model
@@ -24,7 +47,10 @@ class Environment:
         return [self.olist_price, self.orders] + self.data.iloc[self.t].tolist() 
     
     def predict_demand(self, model, df_row, olist_price):
-        
+        """
+        Returns prediction of a given model
+        """
+
         year = df_row.year
         month = df_row.month
         dayofweek = df_row.dayofweek
@@ -51,6 +77,13 @@ class Environment:
         return max(orders[0],0)
 
     def step(self, act):       
+        """
+        Contains the steps to increase the base_cost
+        Each step consists of a possible action of the RL agent
+
+        Depends on:
+        predict_demand 
+        """
         
         # act = 0: stay, 1: raise, 2: lower
         if act == 0:

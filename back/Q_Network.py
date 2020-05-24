@@ -2,6 +2,15 @@ import torch
 import torch.nn as nn
 
 class Q_Network(nn.Module):
+    """
+    Neural Network architecture for the agent
+    Depends on:
+    obs_len: length of the "observation" vector provided by the environment,
+             which is the input of the network
+    hidden_size: number of neurons used for the 4 hidden layers
+    actions_n: length of the output of the network, consisting of
+               Q-values for each possible action
+    """
         
     def __init__(self,obs_len,hidden_size,actions_n):
             
