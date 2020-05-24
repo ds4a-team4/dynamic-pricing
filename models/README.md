@@ -13,3 +13,6 @@ In this folder we hold the base code to our reinforcement Learning Agent.
 
 ## Cellphones
 The cellphones folder contains the final data and models used in our selected category to experiment with the aforementioned techniques.
+
+## Draft folder
+In this folder we keep all tests made, with different approaches for analysing the data.
