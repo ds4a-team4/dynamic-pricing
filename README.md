@@ -27,18 +27,13 @@ Collection of datasets.
 ## models
 Folder that hosts both the simulator's code to forecast orders levels and the Reinforcement Learning algorithms that were used.
 
-## models_dash
-Folder that contains the last version of our simulator.  
-
 ## File Structure
 ├── back  -- Flask API  
 │   ├── models  
 ├── DASH -- Hosts our front end  
 │   └── assets  
-├── data  -- Our Datasets 
+├── data  -- Our Datasets  
 ├── EDA  -- Exploratory data analysis  
 ├── ETL  
 ├── models  -- Model collection and testing  
 │   └── cellphones  
-└── models_dash  -- Final Model using Reinforcement Learning    
-    └── cellphones  
