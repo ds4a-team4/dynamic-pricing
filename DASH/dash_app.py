@@ -4,7 +4,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import pandas as pd
-from datetime import datetime as dt
 
 import torch
 import torch.nn as nn
@@ -17,6 +16,31 @@ from sqlalchemy import create_engine
 
 
 class Environment:
+    """
+    Simulates an environment for the RL agent
+    Init arguments:
+    model: a model to predict demand as a function of price and other
+           covariates (see the function predict_demand)
+    df: dataframe with historical data, including the competitors'
+        prices
+
+    Properties:
+    self.model: the model used to predict demand
+    self.data: the dataframe with historical data
+    self.N: max number os iterations considering the length of self.data
+    self.t: indicates the current time, starting at 0
+    self.done: indicates that the simulation is done, i.e. the simulation
+               has been run on the entire self.data dataframe
+    self.orders: the number of orders predicted for the current time instant
+    self.olist_price: the price selected due to and action
+
+    Methods:
+    reset(self): resets the simulation to the initial conditions
+    step(self, act): performs a step in the simulation considering
+                     an action ranging from 0 to 9 
+                     (choice of a price)
+    )
+    """
 
     def __init__(self, model, df):
 
@@ -34,8 +58,6 @@ class Environment:
         return [self.olist_price, self.orders] + self.data.iloc[self.t].tolist()
 
     def step(self, act):
-
-        # act = 0: stay, 1: raise, 2: lower
         if act == 0:
             self.olist_price = self.data['base_cost'][self.t] * 1.05
         elif act == 1:
@@ -76,6 +98,15 @@ class Environment:
 
 
 class Q_Network(nn.Module):
+    """
+    Neural Network architecture for the agent
+    Depends on:
+    obs_len: length of the "observation" vector provided by the environment,
+             which is the input of the network
+    hidden_size: number of neurons used for the 4 hidden layers
+    actions_n: length of the output of the network, consisting of
+               Q-values for each possible action
+    """
 
     def __init__(self, obs_len, hidden_size, actions_n):
 
@@ -103,6 +134,10 @@ class Q_Network(nn.Module):
 
 
 def predict_demand(model, df_row, olist_price):
+    """
+    Auxiliary function to use the model to obtain the predicted
+    demand, given a price and other covariates on a dataframe row
+    """
 
     year = df_row.year
     month = df_row.month
@@ -132,24 +167,28 @@ def predict_demand(model, df_row, olist_price):
     return max(orders[0], 0)
 
 
+# Parameters of the trained NN
 hidden_size = 30
 input_size = 2 + 16
 output_size = 10
 
+# Loading of the trained NN parameters
 Q = Q_Network(input_size, hidden_size, output_size)
 Q.load_state_dict(torch.load('./Q_state.torch',
                              map_location=torch.device('cpu')))
 
+# Loading of the model for predicting demand
 with open('./lr_cellphone_C.pkl', 'rb') as f:
     model = pickle.load(f)
 
-df = pd.read_csv('./cellphones_final_results.csv')
+# Loading of preprocessed data for with results for the entire period
+#df = pd.read_csv('./cellphones_final_results.csv')
 
-# config = configparser.ConfigParser()
-# config.read('rds.conf')
-# uri = config.get('rds', 'uri')
-# engine = create_engine(uri)
-# df = pd.read_sql_table("rl_results", con=engine)
+config = configparser.ConfigParser()
+config.read('rds.conf')
+uri = config.get('rds', 'uri')
+engine = create_engine(uri)
+df = pd.read_sql_table("rl_results", con=engine)
 
 ############ DASH APP ##############
 
@@ -168,31 +207,17 @@ app.title = 'Dynamic Pricing'
 app.layout = dbc.Container(
     html.Div(
         [
-#             html.Div(
-#                 [
-#                     html.H1
-#                     (
-#                         children='Olist Dynamic Pricing',
-#                         style={
-#                             'text-align': 'center',
-#                             'margin-top': '20px',
-#                             'margin-bottom': '45px',
-#                             'color': '#0C29D0',
-#                             'background-image': 'url("/assets/background-cloud.jpg")'
-#                         }
-#                     )
-#                 ]
-#             ),
             html.Div(
-                    [
-                        html.Img(src=app.get_asset_url('logo.png'), style={'height':'15%', 'width':'20%'})
-                    ],
-                    style={
-                        'display': 'inline-block',
-                        'text-align': 'center'
-                    }
-            ),        
-            
+                [
+                    html.Img(src=app.get_asset_url('logo.png'),
+                             style={'height': '15%', 'width': '20%'})
+                ],
+                style={
+                    'display': 'inline-block',
+                    'text-align': 'center'
+                }
+            ),
+
 
             html.Div(
                 [
@@ -306,7 +331,7 @@ app.layout = dbc.Container(
                     )
                 ], className="row",
                 style={
-                    'margin-bottom': '55px'                    
+                    'margin-bottom': '55px'
                 }
             ),
 
@@ -533,6 +558,10 @@ app.layout = dbc.Container(
     ]
 )
 def update_graph(selector_group, selector_type, selector_price_range):
+    """
+    Callback to update plot according to the selected product category
+    In the current version, it only works with electronics - cellphones - C price category
+    """
     data = []
     if 'electronics' in selector_group and'cellphones' in selector_type and 'C' in selector_price_range:
         data.append({'x': df.index, 'y': df.rl_rewards, 'type': 'line',
@@ -584,7 +613,14 @@ def update_graph(selector_group, selector_type, selector_price_range):
 )
 def update_output(date_input, freight_value_input, competition_price_input,
                   stock_input, base_cost_input):
+    """
+    Callback to update the results fields (Suggested Price, Predicted Orders
+    and predicted profits), using the RL agent and the demand model with the 
+    input data provided (date, stocks, cost, shipping value and competitors' 
+    price)
+    """
 
+    # Input Data validation
     try:
         date = datetime.datetime.strptime(date_input, '%m/%d/%Y')
         date_invalid = {'display': 'none'}
@@ -620,6 +656,7 @@ def update_output(date_input, freight_value_input, competition_price_input,
         base_cost = None
         base_cost_invalid = {'display': 'block', 'color': '#FF0000'}
 
+    # RL Agent
     if date and freight_value and competition_price and stock and base_cost:
         year = date.year
         month = date.month
